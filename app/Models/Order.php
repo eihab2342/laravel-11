@@ -10,6 +10,8 @@ class Order extends Model
     use HasFactory;
     protected $fillable = [
         'user_id',
+        'first_name',
+        'last_name',
         'email',
         'phone_number',
         'governorate',
@@ -18,6 +20,8 @@ class Order extends Model
         'shipping_address',
         'payment_status',
         'total_amount',
+        'created_at',
+        'updated_at',
     ];
 
 
@@ -26,5 +30,16 @@ class Order extends Model
     public function items()
     {
         return $this->hasMany(OrderItems::class, 'order_id');
+    }
+
+    // public function user()
+    // {
+    //     return $this->hasMany(User::class, 'foreign_key', 'local_key');
+    // }
+    // protected $fillable = ['user_id', 'user_name', 'email', 'phone_number', 'payment_status', 'order_status', 'total_amount', 'governorate', 'city', 'village', 'shipping_address'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id');
     }
 }

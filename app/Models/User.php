@@ -9,14 +9,16 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
-
+    use Notifiable;
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
+
+
+
+
     protected $fillable = [
         'name',
         'email',
@@ -29,6 +31,10 @@ class User extends Authenticatable
         return $this->hasMany(Cart::class);
     }
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'foreign_key', 'local_key');
+    }    // العلاقة مع الكوبونات
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -51,4 +57,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // public function notifications()
+    // {
+    //     return $this->morphMany('App\Models\Notification', 'notifiable');
+    // }
 }

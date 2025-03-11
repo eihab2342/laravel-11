@@ -4,7 +4,18 @@
 @section('content')
     {{--  --}}
     <div class="max-w-6xl mx-auto bg-white p-6 rounded-lg shadow-lg mt-5">
-        <a href="{{ route('products.create') }}">اضفه منتج</a>
+        <div class="flex justify-between items-center">
+            <a href="{{ route('products.create') }}"
+                class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+                + إضافة منتج
+            </a>
+
+            <a href="{{ route('products.import') }}"
+                class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition">
+                + رفع ملف منتجات
+            </a>
+        </div>
+
         <h2 class="text-2xl font-bold text-center mb-6">قائمة المنتجات</h2>
 
         <table class="min-w-full table-auto border-collapse">
@@ -22,12 +33,9 @@
                         <td class="px-4 py-2 text-sm text-gray-700">{{ $product->name }}</td>
                         <td class="px-4 py-2 text-sm text-gray-700">{{ $product->price }} ج.م</td>
                         <td class="px-4 py-2 text-sm text-gray-700">
-                            @if ($product->images->isNotEmpty())
-                                <img src="{{ asset('storage/products/' . $product->images->first()->image) }}"
+                            <img src="{{ asset('storage/products/' . $product->images->first()->image) }}"
                                 alt="{{ $product->name }}" class="w-20 h-20 object-contain rounded">
-                            @else
-                                <span class="text-gray-500">لا توجد صورة</span>
-                            @endif
+                            {{-- <span class="text-gray-500">لا توجد صورة</span> --}}
                         </td>
                         <td class="px-4 py-2 text-sm">
                             <a href="{{ route('products.edit', $product->id) }}"

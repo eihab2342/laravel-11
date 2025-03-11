@@ -53,7 +53,7 @@
 
                     <!-- زر الشراء -->
                     <button
-                        class="shopping-cart-icon bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition duration-300"
+                        class="shopping-cart-icon bg-green-600 text-white px-6 py-3 rounded-lg shadow hover:bg-green-700 transition duration-300"
                         data-product-id="{{ $product->id }}">
                         إضافة إلى السلة
                     </button>
@@ -71,14 +71,23 @@
         </div>
     </div>
 
-    {{--  --}}
+    <h3 class="text-xl font-bold text-gray-800 mb-4 text-center border-b-2 border-gray-300 pb-2">
+        الحاجات دي هتعجبك كمان
+    </h3>
     {{-- cards --}}
-    <div class="swiper-container core-swiper-container mb-5"
+    <div class="swiper-container core-swiper-container m-5"
         style="overflow: hidden; margin-top: 40px; margin-bottom: 40px;">
         <div class="swiper-wrapper mb-6" style="margin-bottom: 30px">
             @foreach ($relatedProducts as $product)
                 <div class="swiper-slide core-swiper-slide">
-                    <div class="core-product-card bg-white p-2 rounded-lg shadow-lg" style="height: 310px">
+                    <div class="core-product-card bg-white p-4 rounded-lg shadow-lg"
+                        style="height: 320px; position: relative;">
+                        <!-- Badge for Discount -->
+                        <div
+                            class="core-discount-badge text-white bg-red-500 px-2 py-1 rounded-full absolute top-2 right-2">
+                            {{ round((($product->old_price - $product->price) / $product->old_price) * 100) }}% off
+                        </div>
+
                         <a href="{{ route('product.details', $product->name) }}">
                             <div class="core-product-image mb-4">
                                 @if (!empty($product->images) && $product->images->count() > 0)
@@ -90,17 +99,22 @@
                                 @endif
                             </div>
                         </a>
+
+                        <!-- Product Name -->
                         <div class="core-product-title text-sm font-semibold mb-2 line-clamp">
                             {{ $product->name }}
                         </div>
+
+                        <!-- Rating -->
                         <div class="core-product-rating text-yellow-500">★★★★★ (10)</div>
-                        <div class="core-product-price text-lg font-bold text-green-500">
-                            {{ $product->price }} <span
-                                class="core-old-price line-through text-gray-500">{{ $product->old_price }}</span>
+
+                        <!-- Price -->
+                        <div class="core-product-price text-md font-bold text-green-500">
+                            {{ $product->price }}<span class="core-old-price line-through text-gray-500 text-sm">
+                                {{ $product->old_price }}</span>
                         </div>
-                        <div class="core-discount text-red-500">
-                            33% off
-                        </div>
+
+                        <!-- Cart Icon (bottom-left) -->
                         <div class="cart-container flex items-center">
                             <span class="shopping-cart-icon" id="add-to-cart"
                                 data-product-id="{{ $product->id }}">🛒</span>
@@ -110,6 +124,10 @@
             @endforeach
         </div>
     </div>
+
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
         var swiper = new Swiper('.core-swiper-container', {

@@ -3,7 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderItems;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\OrderNotification;
+use Illuminate\Notifications\DatabaseNotification;
 
 class OrderController extends Controller
 {
@@ -43,13 +49,30 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Order $order)
+    public function show($id)
     {
-        //
-        // Order $order, 
-        // return view('admin.orders.order', compact('order'));
         // 
-        $order = Order::with('items')->findOrFail($order->id);
+        $order = Order::with('items')->findOrFail($id);
+        return view('admin.orders.order', compact(['order']));
+        $notification = DatabaseNotification::find($notificationID);
+        // عشان نخلى الاشعار مقروء
+        if ($notification && !$notification->read_at) {
+            $notification->markAsRead();
+        }
+    }
+    /**
+     * Display the specified resource.
+     */
+    public function showID($id, $notificationID)
+    {
+        $notification = DatabaseNotification::find($notificationID);
+        // عشان نخلى الاشعار مقروء
+        if ($notification && !$notification->read_at) {
+            $notification->markAsRead();
+        }
+
+
+        $order = Order::with('items')->findOrFail($id);
         return view('admin.orders.order', compact('order'));
     }
 
@@ -91,4 +114,23 @@ class OrderController extends Controller
         // إرجاع استجابة JSON لتأكيد التحديث
         return response()->json(['success' => true]);
     }
+
+    public function UserOrders()
+    {
+        $orders = Order::where('user_id', Auth::id())->with('items')->get();
+        return view('user.User-Orders', compact('orders'));
+    }
+
+    // public function UserOrders()
+    // {
+    //     $orders = Order::where('user_id', Auth::id())->with('order_items');
+    //     // $LimitOrders = Order::where('order_status', 'pending')->orderBy('created_at', 'desc')->limit(10)->get();
+    //     // $OrdersCount = Order::where('payment_status', 'paid')->count();
+    //     // $PendingOrders = Order::where('order_status', 'pending')->count();
+    //     // جلب الطلبات المدفوعة فقط
+    //     // $paid_orders = Order::where('payment_status', 'paid')->get();
+
+    //     // تمرير البيانات إلى كل من الواجهات المطلوبة
+    //     return view('user.User-Orders', compact('orders'));
+    // }
 }

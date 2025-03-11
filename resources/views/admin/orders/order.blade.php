@@ -9,16 +9,17 @@
                 <div class="bg-white rounded-lg shadow-md p-4 mb-4">
                     <div class="font-bold text-gray-800">تفاصيل العميل</div>
                     <div class="text-sm text-gray-600">
-                        <p><strong>الاسم:</strong><span class="text-lg text-black"> {{ $order->name }} </span></p>
-                        <p><strong>البريد الإلكتروني:</strong><span class="text-lg text-black"> {{ $order->email }} </span>
+                        <p><strong>الاسم:</strong><span class="text-lg text-red-700">
+                                {{ $order->first_name . $order->last_name }} </span></p>
+                        <p><strong>البريد الإلكتروني:</strong><span class="text-lg text-red-700"> {{ $order->email }} </span>
                         </p>
-                        <p><strong>رقم الهاتف:</strong><span class="text-lg text-black">{{ $order->phone_number }} </span>
+                        <p><strong>رقم الهاتف:</strong><span class="text-lg text-red-700">{{ $order->phone_number }} </span>
                         </p>
                         <p><strong>العنوان:</strong> <span
-                                class="text-lg text-black">{{ $order->governorate . ' - ' . $order->city . ' - ' . $order->village }}
+                                class="text-lg text-red-700">{{ $order->governorate . ' - ' . $order->city . ' - ' . $order->village }}
                                 </class=>
                         </p>
-                        <p><strong> عنوان الشحن: </strong><span class="text-lg text-black"> {{ $order->shipping_address }}
+                        <p><strong> عنوان الشحن: </strong><span class="text-lg text-red-700"> {{ $order->shipping_address }}
                             </span></p>
                     </div>
                 </div>
@@ -26,9 +27,12 @@
                 <div class="bg-white rounded-lg shadow-md p-4 mb-4">
                     <div class="font-bold text-gray-800">تفاصيل الطلب</div>
                     <div class="text-lg text-gray-600">
-                        <p><strong>تاريخ الطلب:</strong> {{ $order->order_date }}</p>
+                        <p><strong>تاريخ الطلب:</strong> {{ $order->created_at }}</p>
                         <p><strong>حالة الدفع:</strong> {{ $order->payment_status }} </p>
-                        <p><strong>التكلفة الإجمالية:</strong> {{ $order->total_amount }} </p>
+                        <p><strong> نوع الدفع: </strong><span class="text-red-900 text-2xl"> {{ $order->payment_method }}
+                            </span></p>
+                        <p><strong>التكلفة الإجمالية: </strong><span class="text-green-800 text-2xl">
+                                {{ $order->total_amount }} </span></p>
                     </div>
                 </div>
             </div>
@@ -50,8 +54,7 @@
                         <tbody>
                             @foreach ($order->items as $item)
                                 <tr class="text-center">
-                                    {{-- https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIGrpFd4O7SkJ3AaLDmSQSXJSvFV1hQ2G8rA&s --}}
-                                    <td class="border border-gray-300 p-2"><img src="{{ $item->product_image }}"
+                                    <td class="border border-gray-300 p-2"><img src="{{ $item->images }}"
                                             alt="Product Image" class="w-16 h-16 object-contain"></td>
                                     <td class="border border-gray-300 p-2"> {{ $item->product_name }} </td>
                                     <td class="border border-gray-300 p-2"> {{ $item->quantity }} </td>

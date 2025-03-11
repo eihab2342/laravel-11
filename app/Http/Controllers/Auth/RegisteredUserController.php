@@ -37,13 +37,13 @@ class RegisteredUserController extends Controller
         return view('auth.otp');
     }
 
-
     public function sendOtp(Request $request)
     {
         // التحقق من صحة البيانات المدخلة
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
+            'phone_number' => 'required|digits:11',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
@@ -54,6 +54,7 @@ class RegisteredUserController extends Controller
         Session::put('user_registration', [
             'name' => $request->name, //
             'email' => $request->email, //
+            'phone_number' => $request->phone_number,
             'password' => bcrypt($request->password), // تشفير كلمة المرور
             'otp_code' => $otp, // الرمز العشوائي
             'otp_expires_at' => now()->addMinutes(4), // شغال لحد 4 دقائق 
@@ -64,12 +65,11 @@ class RegisteredUserController extends Controller
         //  وبنستدعيه بالطريقة دي فوق
         // use Illuminate\Support\Facades\Mail;
         // use App\Mail\SendOtpMail;
-        Mail::to($request->email)->send(new SendOtpMail($otp)); 
+        Mail::to($request->email)->send(new SendOtpMail($otp));
 
         // التوجيه إلى صفحة إدخال OTP
         return redirect()->route('verify.otp');
     }
-
     // 
     public function resendOtp()
     {
@@ -91,6 +91,7 @@ class RegisteredUserController extends Controller
         Session::put('user_registration', [
             'name' => $userData['name'],
             'email' => $userData['email'],
+            'phone_number' => $userData['phone_number'],
             'password' => $userData['password'],
             'otp_code' => $otp,
             'otp_expires_at' => now()->addMinutes(4),
@@ -102,8 +103,6 @@ class RegisteredUserController extends Controller
 
         return response()->json(['message' => 'تم إعادة إرسال رمز التحقق إلى بريدك الإلكتروني.'], 200);
     }
-
-
 
     public function verifyOtp(Request $request)
     {
@@ -129,6 +128,7 @@ class RegisteredUserController extends Controller
             $user = User::create([
                 'name' => Session::get('user_registration')['name'],
                 'email' => Session::get('user_registration')['email'],
+                'phone_number' => Session::get('user_registration')['phone_number'],
                 'password' => Session::get('user_registration')['password'],
                 'role' => 'user',
 
@@ -146,15 +146,12 @@ class RegisteredUserController extends Controller
         return redirect()->back()->withErrors(['otp' => 'الرمز غير صحيح أو منتهي الصلاحية']);
     }
 
-
-
-
-
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
+            'phone_number' => 'required|digits:11',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
@@ -165,6 +162,7 @@ class RegisteredUserController extends Controller
         Session::put('user_registration', [
             'name' => $request->name,
             'email' => $request->email,
+            'phone_number' => $request->phone_number,
             'password' => bcrypt($request->password),
             'otp_code' => $otp,
             'otp_expires_at' => Carbon::now()->addMinutes(10), // صلاحية OTP لمدة 10 دقائق
@@ -176,42 +174,4 @@ class RegisteredUserController extends Controller
         return redirect()->route('verify.otp');
         // return response()->json(['message' => 'تم إرسال رمز التحقق إلى بريدك الإلكتروني.'], 200);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // public function store(Request $request): RedirectResponse
-    // {
-    //     $request->validate([
-    //         'name' => ['required', 'string', 'max:255'],
-    //         'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-    //         'password' => ['required', 'confirmed', Rules\Password::defaults()],
-    //     ]);
-
-    //     // --------------------
-    //     $otp = rand(100000, 999999);
-
-
-    //     $user = User::create([
-    //         'name' => $request->name,
-    //         'email' => $request->email,
-    //         'password' => Hash::make($request->password),
-    //     ]);
-
-    //     event(new Registered($user));
-
-    //     Auth::login($user);
-
-    //     return redirect(route('dashboard', absolute: false));
-    // }
 }

@@ -69,7 +69,7 @@
                     <!-- مثال على البيانات -->
                     <tr class="border-b hover:bg-gray-50">
                         <td class="px-4 py-2 text-sm text-gray-700">#{{ $order->id }}</td>
-                        <td class="px-4 py-2 text-sm text-gray-700">{{ $order->name }}</td>
+                        <td class="px-4 py-2 text-sm text-gray-700">{{ $order->first_name }}</td>
                         <td
                             class="px-4 py-2 text-sm 
                         @if ($order->payment_status == 'paid') text-green-500
@@ -77,10 +77,11 @@
                         @else text-yellow-500 @endif">
                             {{ $order->payment_status }}
                         </td>
-                        <td class="px-4 py-2 text-sm text-gray-700">{{ $order->total_amount }} ج.م</td>
-                        <td class="px-4 py-2 text-sm text-gray-700"> {{ $order->order_date }} </td>
+                        <td class="px-4 py-2 text-sm text-green-700">{{ $order->total_amount }} ج.م</td>
+                        <td class="px-4 py-2 text-sm text-gray-700"> {{ $order->created_at }} </td>
                         <td class="px-4 py-2 text-sm">
-                            <a href="{{ route('orders.order', $order->id) }}" class="text-blue-500 hover:underline">عرض</a>
+                            <a href="{{ route('orders.show', ['id' => $order->id]) }}"
+                                class="text-blue-500 hover:underline">عرض</a>
                         </td>
                     </tr>
                 @endforeach

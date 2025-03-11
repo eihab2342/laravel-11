@@ -10,11 +10,14 @@
             <div class="bg-white p-6 rounded-lg shadow-lg">
                 <h2 class="text-xl font-semibold text-gray-700 mb-4">صور المنتج</h2>
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    @foreach ($product->images as $image)
-                        <div class="overflow-hidden rounded-lg shadow-md relative">
-                            <img src="{{ asset('storage/products/' . $image->image) }}" />
-                        </div>
-                    @endforeach
+                    @if (!empty($products->images))
+                        @foreach ($product->images as $image)
+                            <div class="overflow-hidden rounded-lg shadow-md relative">
+                                <img src="{{ asset('storage/products/' . $image->image) }}" />
+                            </div>
+                        @endforeach
+                    @endif
+
                 </div>
             </div>
 
@@ -40,7 +43,7 @@
                 <div class="mb-6">
                     <h3 class="text-lg font-semibold text-gray-700 mb-2">الحالة</h3>
                     <span class="text-lg font-bold {{ $product->stock > 0 ? 'text-green-500' : 'text-red-500' }}">
-                        {{ $product->stock > 0 ? 'متوفر' : 'غير متوفر' }}
+                        {{-- {{ $product->stock > 0 ? 'متوفر' : 'غير متوفر' }} --}}
                     </span>
                 </div>
 
@@ -50,7 +53,7 @@
                     <ul class="list-disc list-inside text-gray-600">
                         <li><span class="font-semibold">الوزن:</span> {{ $product->weight }} كجم</li>
                         <li><span class="font-semibold">العلامة التجارية:</span> {{ $product->brand }}</li>
-                        <li><span class="font-semibold">التصنيف:</span> {{ $product->category->name ?? 'غير محدد' }}</li>
+                        <li><span class="font-semibold">التصنيف:</span> {{ $category->name ?? 'غير محدد' }}</li>
                     </ul>
                 </div>
 
@@ -74,4 +77,5 @@
             </div>
         </div>
     </div>
+
 @endsection

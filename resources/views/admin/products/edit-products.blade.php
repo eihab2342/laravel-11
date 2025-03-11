@@ -86,7 +86,7 @@
                                 <div id="preview-container" class="flex flex-nowrap gap-3 overflow-x-auto p-2">
                                     @foreach ($product->images as $image)
                                         <div class="relative group w-32">
-                                            <img src="{{ asset('storage/' . $image->image) }}" alt="صورة المنتج"
+                                            <img src="{{ asset('storage/products/' . $image->image) }}" alt="صورة المنتج"
                                                 class="w-32 h-32 object-cover rounded-lg shadow-md">
 
                                             <!-- زر حذف الصورة -->
@@ -105,7 +105,7 @@
                             </div>
 
                             <!-- معاينة الصور الجديدة -->
-                            <div id="imagePreview"  class="flex flex-nowrap gap-3 overflow-x-auto p-2">
+                            <div id="imagePreview" class="flex flex-nowrap gap-3 overflow-x-auto p-2">
                             </div>
                         </div>
 

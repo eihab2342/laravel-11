@@ -32,7 +32,7 @@
             <td class="px-4 py-2 text-sm text-gray-700">{{ $order->order_date }}</td>
             <td class="px-4 py-2 text-sm">
                 {{-- , 'id' => $id --> order id --}} 
-                <a href="{{route('orders.order', $order->id)}}" class="text-blue-500 hover:underline">عرض</a>
+                <a href="{{route('orders.show', $order->id)}}" class="text-blue-500 hover:underline">عرض</a>
             </td>
         </tr>
         @endforeach

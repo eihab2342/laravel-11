@@ -8,60 +8,228 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+</head>
+<style>
+    body {
+        overflow-x: hidden;
+        direction: rtl;
+    }
+
+    /* السايد بار مفتوح افتراضيًا */
+    .sidebar {
+        width: 250px;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        right: 0;
+        /* السايد بار مفتوح عند بدء الصفحة */
+        background: #343a40;
+        color: white;
+        transition: 0.3s ease-in-out;
+        padding-top: 10px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #6c757d transparent;
+    }
+
+    /* تخصيص شكل شريط التمرير للسايد بار */
+    .sidebar::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+        background-color: #6c757d;
+        border-radius: 5px;
+    }
+
+    .content {
+        transition: margin-right 0.3s ease-in-out;
+        margin-right: 280px;
+        /* تحريك المحتوى ليأخذ مساحة السايد بار */
+        height: 100vh;
+        overflow-y: auto;
+        padding: 20px;
+    }
+
+    .sidebar a:hover {
+        background: #495057;
+    }
+
+    /* عند إغلاق السايد بار */
+    .sidebar.closed {
+        right: -250px;
+    }
+
+    .content.shift {
+        margin-right: 40px;
+    }
+
+    /* زر التحكم */
+    .toggle-btn {
+        position: fixed;
+        right: 260px;
+        /* متناسق مع السايد بار المفتوح */
+        top: 15px;
+        background: #343a40;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        transition: 0.3s ease-in-out;
+        border-radius: 5px;
+        z-index: 1000;
+    }
+
+    .toggle-btn:hover {
+        background: #495057;
+    }
+
+    /* عند إغلاق السايد بار */
+    .sidebar.closed+.toggle-btn {
+        right: 10px;
+    }
+</style>
 </head>
 
-<body class="bg-gray-100" style="direction: rtl;">
+<body>
 
-    <div class="flex h-screen">
-        <!-- زر فتح وإغلاق السايد بار -->
-        <button id="toggleSidebar" class="p-2 text-3xl bg-slate-100 text-gray-800 fixed top-1 right-5 z-50 rounded">
-            ☰
-        </button>
+    <!-- السايد بار -->
+    <div class="sidebar" id="sidebar">
+        <h1 class="text-center m-1">YAZAN</h1>
+        <hr>
+        <ul>
+            <li class="mb-4">
+                <a href="{{ route('dashboard') }}"
+                    class="hover:bg-gray-700 p-2 block rounded-lg text-white flex items-center">
+                    <i class="fas fa-home ml-3"></i> الرئيسية
+                </a>
+            </li>
+            <li class="mb-4">
+                <a href="{{ route('products') }}"
+                    class="hover:bg-gray-700 p-2 block rounded-lg text-white flex items-center">
+                    <i class="fas fa-box-open ml-3"></i> المنتجات
+                </a>
+            </li>
+            <li class="mb-4">
+                <a href="{{ route('categories') }}"
+                    class="hover:bg-gray-700 p-2 block rounded-lg text-white flex items-center">
+                    <i class="fas fa-tags ml-3"></i> الفئات
+                </a>
+            </li>
+            <li class="mb-4">
+                <a href="{{ route('control') }}"
+                    class="hover:bg-gray-700 p-2 block rounded-lg text-white flex items-center">
+                    <i class="fas fa-cogs ml-3"></i> التحكم
+                </a>
+            </li>
+            <li class="mb-4">
+                <a href="{{ route('packages.index') }}"
+                    class="hover:bg-gray-700 p-2 block rounded-lg text-white flex items-center">
+                    <i class="fas fa-box ml-3"></i> باكدجات
+                </a>
+            </li>
+            <li class="mb-4">
+                <a href="{{ route('add-image') }}"
+                    class="hover:bg-gray-700 p-2 block rounded-lg text-white flex items-center">
+                    <i class="fas fa-image ml-3"></i> إعدادات الصور
+                </a>
+            </li>
+            <li class="mb-4">
+                <a href="{{ route('orders') }}"
+                    class="hover:bg-gray-700 p-2 block rounded-lg text-white flex items-center">
+                    <i class="fas fa-shopping-cart ml-3"></i> الطلبات
+                </a>
+            </li>
+            <li class="mb-4">
+                <a href="{{ route('coupons.index') }}"
+                    class="hover:bg-gray-700 p-2 block rounded-lg text-white flex items-center">
+                    <i class="fas fa-ticket-alt ml-2"></i> الكوبونات
+                </a>
+            </li>
+            <li class="mb-4">
+                <a href="{{ route('profile.edit') }}"
+                    class="hover:bg-gray-700 p-2 block rounded-lg text-white flex items-center">
+                    <i class="fas fa-user-cog ml-3"></i> الإعدادات
+                </a>
+            </li>
+            <li class="mt-6">
+                <a href="{{ route('logout') }}"
+                    class="hover:bg-gray-700 p-2 block rounded-lg text-white flex items-center"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class="fas fa-sign-out-alt ml-3"></i> تسجيل الخروج
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                    @csrf
+                </form>
+            </li>
+        </ul>
+    </div>
 
-        <!-- Sidebar -->
-        <div id="sidebar"
-            class="w-64 bg-gray-800 text-white p-4 overflow-y-auto transition-transform fixed right-0 top-0 h-full transform translate-x-0">
-            <h4 class="text-center text-xl font-semibold ">YAZAN</h4>
-            <hr class="my-2">
+    <!-- زر الفتح والغلق -->
+    <!-- زر الفتح والإغلاق -->
+    <button class="toggle-btn" id="toggleBtn" onclick="toggleSidebar()">☰</button>
 
-            <ul>
-                <li class="mb-4">
-                    <a href="{{ route('dashboard') }}" class="hover:bg-gray-700 p-2 block rounded-lg text-white">الرئيسية</a>
-                </li>
-                <li class="mb-4">
-                    <a href="{{ route('products') }}" class="hover:bg-gray-700 p-2 block rounded-lg text-white">المنتجات</a>
-                </li>
-                <li class="mb-4">
-                    <a href="{{ route('orders') }}" class="hover:bg-gray-700 p-2 block rounded-lg text-white">الطلبات</a>
-                </li>
-                <li class="mb-4">
-                    <a href="#" class="hover:bg-gray-700 p-2 block rounded-lg text-white">المستخدمين</a>
-                </li>
-                <li class="mb-4">
-                    <a href="{{ route('profile.edit') }}" class="hover:bg-gray-700 p-2 block rounded-lg text-white">الإعدادات</a>
-                </li>
-                <li class="mt-6">
-                    <a href="{{ route('logout') }}" class="hover:bg-gray-700 p-2 block rounded-lg text-white"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        تسجيل الخروج
-                    </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                        @csrf
-                    </form>
-                </li>
-            </ul>
-        </div>
+    <!-- السايد بار مفتوح افتراضيًا -->
 
+    <!-- المحتوى الرئيسي -->
+
+    <!-- المحتوى الرئيسي -->
+    <div class="content" id="content">
         <!-- Content Area -->
-        <div class="flex-1 p-5 overflow-y-auto mr-64"> <!-- أضفنا mr-64 لمنع المحتوى من التداخل مع السايد بار -->
-            <div class="bg-white p-4 shadow-md rounded-lg mb-3 text-right">
-                <span class="text-gray-700"> أهلا، </span>
-                <span class="font-bold"> {{ Auth::user()->name }} </span>
+        <div class="flex-1 p-1 overflow-y-auto mb-4">
+            <div class="bg-white p-4 shadow-md rounded-lg text-right relative">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <span class="text-gray-700"> أهلا، </span>
+                        <span class="font-bold"> {{ Auth::user()->name }} </span>
+                    </div>
 
-                <nav class="flex" aria-label="Breadcrumb">
-                    <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse mt-2">
+                    <!-- أيقونة الإشعارات -->
+                    <div class="relative" x-data="{ open: false }">
+                        <button @click="open = !open" class="relative text-gray-700 hover:text-blue-800">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V10a6 6 0 00-12 0v4c0 .386-.146.735-.405 1.002L4 17h5m6 0a3 3 0 11-6 0">
+                                </path>
+                            </svg>
+                            @if (auth()->user()->unreadNotifications->count() > 0)
+                                <span class="absolute top-0 right-0 block w-2 h-2 bg-red-500 rounded-full"></span>
+                            @endif
+                        </button>
+
+                        <!-- قائمة الإشعارات -->
+                        <div x-show="open" @click.away="open = false"
+                            class="absolute left-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg">
+                            <div class="p-2 text-sm font-semibold text-gray-700 border-b">الإشعارات</div>
+                            <ul class="p-2 space-y-2 max-h-60 overflow-y-auto">
+                                @foreach (auth()->user()->unreadNotifications as $notification)
+                                    <div class="alert alert-info">
+                                        {{ $notification->data['message'] }}
+                                        <a
+                                            href="{{ route('orders.show.notification', ['id' => $notification->data['order_id'], 'notification' => $notification->id]) }}">
+                                            عرض الطلب
+                                        </a>
+                                    </div>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="flex mt-2" aria-label="Breadcrumb">
+                    <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
                         <li class="inline-flex items-center">
-                            <a href="{{ url('/dashboard') }}" class="text-sm font-semibold text-gray-700 hover:text-blue-800">
+                            <a href="{{ url('/dashboard') }}"
+                                class="text-sm font-semibold text-gray-700 hover:text-blue-800">
                                 <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                     fill="currentColor" viewBox="0 0 20 20">
                                     <path
@@ -91,7 +259,8 @@
                                 </svg>
 
                                 @if (!$isLast)
-                                    <a href="{{ url($segmentUrl) }}" class="ms-1 text-sm font-semibold hover:text-green-800">
+                                    <a href="{{ url($segmentUrl) }}"
+                                        class="ms-1 text-sm font-semibold hover:text-green-800">
                                         {{ $segmentName }}
                                     </a>
                                 @else
@@ -105,26 +274,48 @@
                 </nav>
             </div>
 
+            <!-- تضمين Alpine.js -->
+            <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+            <!-- Script لتفعيل الدروب داون -->
+            <script>
+                document.getElementById('notification-btn').addEventListener('click', function() {
+                    let dropdown = document.getElementById('notification-dropdown');
+                    dropdown.classList.toggle('hidden');
+                });
+
+                // إغلاق القائمة عند الضغط خارجها
+                document.addEventListener('click', function(event) {
+                    let dropdown = document.getElementById('notification-dropdown');
+                    let button = document.getElementById('notification-btn');
+
+                    if (!dropdown.contains(event.target) && !button.contains(event.target)) {
+                        dropdown.classList.add('hidden');
+                    }
+                });
+            </script>
+
             @yield('content')
         </div>
     </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const sidebar = document.getElementById('sidebar');
-        const toggleSidebar = document.getElementById('toggleSidebar');
+    <script>
+        function toggleSidebar() {
+            let sidebar = document.getElementById("sidebar");
+            let content = document.getElementById("content");
+            let toggleBtn = document.getElementById("toggleBtn");
 
-        toggleSidebar.addEventListener('click', () => {
-            if (sidebar.classList.contains('translate-x-0')) {
-                sidebar.classList.remove('translate-x-0');
-                sidebar.classList.add('translate-x-full');
+            sidebar.classList.toggle("closed");
+            content.classList.toggle("shift");
+
+            // تعديل موقع الزر حسب حالة السايد بار
+            if (sidebar.classList.contains("closed")) {
+                toggleBtn.style.right = "10px";
             } else {
-                sidebar.classList.remove('translate-x-full');
-                sidebar.classList.add('translate-x-0');
+                toggleBtn.style.right = "260px";
             }
-        });
-    });
-</script>
+        }
+    </script>
 
 </body>
 

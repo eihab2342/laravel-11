@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // تسجيل Middleware هنا
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,
+            'clear.discount' => \App\Http\Middleware\ClearDiscountSession::class
             // 
         ]);
     })
